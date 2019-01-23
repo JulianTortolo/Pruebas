@@ -1,5 +1,6 @@
 package org.apache.maven.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.maven.clients.UsersAPI;
 import org.apache.maven.domain.Tasks.Task;
 
@@ -10,6 +11,7 @@ public class TaskModel {
     private int id;
     private String name;
     private String description;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date createDate;
     private UserModel user;
 

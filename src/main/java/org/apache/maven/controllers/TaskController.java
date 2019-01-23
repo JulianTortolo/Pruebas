@@ -20,69 +20,40 @@ public class TaskController {
     TaskService taskService;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TaskModel> GetAllTasks(){
+    public ResponseEntity<List<TaskModel>> GetAllTasks(){
         List<TaskModel> tasks = taskService.GetTasks();
-        return tasks;
+        ResponseEntity<List<TaskModel>> response = tasks.size() > 0 ? new ResponseEntity<>(tasks, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return response;
     }
-
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TaskModel> GetTask(@PathVariable int id)throws Exception{
-        ResponseEntity<TaskModel> response;
         TaskModel taskModel = taskService.GetTaskById(id);
-        if(taskModel != null && taskModel.getId() > 0){
-            response = new ResponseEntity<>(taskModel, HttpStatus.OK);
-        }
-        else{
-            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        ResponseEntity<TaskModel> response = taskModel != null ? new ResponseEntity<>(taskModel, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return response;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> CreateTask(@RequestBody Task task) throws Exception{
-        ResponseEntity<Object> response;
-
-        boolean success = taskService.CreateTask(task);
-        if(success){
-            response = new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
+    public ResponseEntity<TaskModel> CreateTask(@RequestBody Task task) throws Exception{
+        TaskModel taskModel = taskService.CreateTask(task);
+        ResponseEntity<TaskModel> response = taskModel != null ? new ResponseEntity<>(taskModel, HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return response;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Object> UpdateTask(@PathVariable int id, @RequestBody Task task) throws Exception{
-        ResponseEntity<Object> response;
+    public ResponseEntity<TaskModel> UpdateTask(@PathVariable int id, @RequestBody Task task) throws Exception{
         task.setId(id);
-        boolean success = taskService.UpdateTask(task);
-        if(success){
-            response = new ResponseEntity<>(HttpStatus.OK);
-        }
-        else {
-            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
+        TaskModel taskModel = taskService.UpdateTask(task);
+        ResponseEntity<TaskModel> response = taskModel != null ? new ResponseEntity<>(taskModel, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return response;
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
     public ResponseEntity<Object> DeleteTask(@PathVariable int id) throws Exception{
-        ResponseEntity<Object> response;
         boolean success = taskService.DeleteTask(id);
-        if(success){
-            response = new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-            response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
+        ResponseEntity<Object> response = success ? new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return response;
     }
 }

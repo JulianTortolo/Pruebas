@@ -19,4 +19,11 @@ public class City {
     public void setName(String name) {
         this.name = name;
     }
+
+    public City(){}
+
+    public City(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

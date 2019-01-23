@@ -1,7 +1,26 @@
 package org.apache.maven.model;
 
+import org.apache.maven.domain.Tasks.City;
+
+import java.util.Date;
+
 public class UserModel {
     private int id;
+    private String firstName;
+    private String lastName;
+    private City city;
+    private Date birthDate;
+
+    public UserModel(int id, String firstName, String lastName, City city){
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+    }
+
+    public UserModel() {
+
+    }
 
     public int getId() {
         return id;
@@ -11,20 +30,35 @@ public class UserModel {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    private String name;
-
-    public UserModel(int id, String name){
-        this.id = id;
-        this.name = name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public UserModel(){};
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
 }

@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Table(name="tasks")
 @Entity
@@ -31,7 +30,7 @@ public class Task implements Serializable {
     }
 
     @JoinColumn(name = "user_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
 
     @NotNull

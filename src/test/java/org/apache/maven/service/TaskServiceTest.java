@@ -1,6 +1,5 @@
 package org.apache.maven.service;
 
-
 import org.apache.maven.converter.TaskConverter;
 import org.apache.maven.domain.Tasks.Task;
 import org.apache.maven.model.TaskModel;

@@ -2,6 +2,7 @@ package org.apache.maven.controllers;
 
 import org.apache.maven.domain.Tasks.Task;
 import com.google.gson.Gson;
+import org.apache.maven.model.TaskModel;
 import org.apache.maven.services.TaskService;
 import org.apache.maven.utils.TaskModelUtils;
 import org.apache.maven.utils.TaskUtils;
@@ -44,8 +45,10 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Tarea TST"))
                 .andExpect(jsonPath("$.description").value("Tarea 1"))
-                .andExpect(jsonPath("$.users.id").value("1"))
-                .andExpect(jsonPath("$.users.name").value("Juan"));
+                .andExpect(jsonPath("$.users.id").value(1))
+                .andExpect(jsonPath("$.users.firstName").value("Juan"))
+                .andExpect(jsonPath("$.users.lastName").value("Perez"))
+                .andExpect(jsonPath("$.users.city.name").value("Maria Juana"));
 
     }
 
@@ -69,12 +72,19 @@ public class TaskControllerTest {
                 .andExpect(jsonPath("$.[0].name").value("Tarea TST 1"))
                 .andExpect(jsonPath("$.[0].description").value("Tarea 1"))
                 .andExpect(jsonPath("$.[0].users.id").value("1"))
-                .andExpect(jsonPath("$.[0].users.name").value("Juan"))
+                .andExpect(jsonPath("$.[0].users.firstName").value("Juan"))
+                .andExpect(jsonPath("$.[0].users.lastName").value("Perez"))
+                .andExpect(jsonPath("$.[0].users.city.id").value(1))
+                .andExpect(jsonPath("$.[0].users.city.name").value("Maria Juana"))
                 .andExpect(jsonPath("$.[1].id").value(2))
                 .andExpect(jsonPath("$.[1].name").value("Tarea TST 2"))
                 .andExpect(jsonPath("$.[1].description").value("Tarea 2"))
-                .andExpect(jsonPath("$.[1].users.id").value("2"))
-                .andExpect(jsonPath("$.[1].users.name").value("Julian"));
+                .andExpect(jsonPath("$.[1].users.id").value(2))
+                .andExpect(jsonPath("$.[1].users.firstName").value("Pablo"))
+                .andExpect(jsonPath("$.[1].users.lastName").value("Picapiedra"))
+                .andExpect(jsonPath("$.[1].users.city.id").value(2))
+                .andExpect(jsonPath("$.[1].users.city.name").value("Rafaela"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -92,7 +102,7 @@ public class TaskControllerTest {
         mvc.perform(MockMvcRequestBuilders.delete("/api/tasks/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -100,7 +110,7 @@ public class TaskControllerTest {
         Task task = TaskUtils.getTask();
         Gson jsonParser = new Gson();
         String requestBody = jsonParser.toJson(task);
-        BDDMockito.given(this.taskService.CreateTask(any(Task.class))).willReturn(true);
+        BDDMockito.given(this.taskService.CreateTask(any(Task.class))).willReturn(new TaskModel());
         mvc.perform(MockMvcRequestBuilders.post("/api/tasks/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
@@ -113,11 +123,10 @@ public class TaskControllerTest {
         Task task = new Task();
         Gson jsonParser = new Gson();
         String requestBody = jsonParser.toJson(task);
-        BDDMockito.given(this.taskService.CreateTask(any(Task.class))).willReturn(false);
+        BDDMockito.given(this.taskService.CreateTask(any(Task.class))).willReturn(new TaskModel());
         mvc.perform(MockMvcRequestBuilders.post("/api/tasks/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .accept(MediaType.APPLICATION_JSON));
     }
 }

@@ -1,9 +1,9 @@
 package org.apache.maven.services;
 
+import org.apache.maven.clients.UsersAPI;
 import org.apache.maven.converter.TaskConverter;
 import org.apache.maven.domain.Tasks.Task;
 import org.apache.maven.model.TaskModel;
-import org.apache.maven.model.UserModel;
 import org.apache.maven.repository.TaskRepository;
 import org.apache.maven.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +23,20 @@ public class TaskService{
     @Autowired
     public TaskConverter taskConverter;
 
-    public boolean CreateTask(Task task) {
-        boolean success;
-
+    public TaskModel CreateTask(Task task) {
+        TaskModel taskModel;
         try {
-            if(!userRepository.exists(task.getUser().getId())){
+            if (!userRepository.exists(task.getUser().getId())) {
                 userRepository.save(task.getUser());
             }
 
-            taskRepository.save(task);
-            success = true;
+            taskModel = taskConverter.convertTask(taskRepository.save(task));
         }
         catch (Exception e){
-            success = false;
+            taskModel = null;
         }
 
-        return success;
+        return taskModel;
     }
 
     public List<TaskModel> GetTasks(){
@@ -46,8 +44,16 @@ public class TaskService{
     }
 
     public TaskModel GetTaskById(int taskId){
-        Task task = taskRepository.findOne(taskId);
-        return mapTaskToTaskModel(task);
+        TaskModel taskModel;
+        try{
+            Task task = taskRepository.findOne(taskId);
+            taskModel = mapTaskToTaskModel(task);
+        }
+        catch (Exception e){
+            taskModel = null;
+        }
+
+        return taskModel;
     }
 
     public boolean DeleteTask(int taskId){
@@ -63,8 +69,8 @@ public class TaskService{
         return success;
     }
 
-    public boolean UpdateTask(Task task){
-        boolean success;
+    public TaskModel UpdateTask(Task task){
+        TaskModel taskModel = new TaskModel();
         try{
             Task taskSaved = taskRepository.findOne(task.getId());
             if(task.getId() > 0) {
@@ -75,13 +81,13 @@ public class TaskService{
                 taskRepository.save(taskSaved);
             }
 
-            success = true;
+            taskModel = taskConverter.convertTask(task);
         }
         catch(Exception e){
-            success = false;
+            taskModel = null;
         }
 
-        return success;
+        return taskModel;
     }
 
     public TaskModel mapTaskToTaskModel(Task task){
@@ -90,8 +96,8 @@ public class TaskService{
             taskModel.setId(task.getId());
             taskModel.setDescription(task.getDescription());
             taskModel.setName(task.getName());
-            taskModel.setUsers(new UserModel(task.getUser().getId(), task.getUser().getname()));
             taskModel.setCreateDate(task.getCreateDate());
+            taskModel.setUsers(UsersAPI.GetUser(task.getUser().getId()));
         }
         return  taskModel;
     }

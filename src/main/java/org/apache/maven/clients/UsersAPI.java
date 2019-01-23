@@ -12,15 +12,16 @@ import java.util.Map;
 
 public final class UsersAPI {
 
+    private static final String token = GetApiToken("kinexo", "kinexo").getToken();
+
     public static UserModel GetUser(int id){
-        GetTokenResponse tokenResponse = GetApiToken("kinexo", "kinexo");
         String apiUrl = "https://gentle-eyrie-95237.herokuapp.com/users/" + id;
         UserModel userModel = new UserModel();
         Gson jsonParser = new Gson();
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
-        headers.put("Authorization", tokenResponse.getToken());
+        headers.put("Authorization", token);
 
         try {
             HttpResponse<String> getUserHttpResult = Unirest.get(apiUrl)
