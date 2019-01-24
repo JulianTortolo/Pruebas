@@ -5,6 +5,7 @@ import org.apache.maven.model.TaskModel;
 import org.apache.maven.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class TaskController {
     TaskService taskService;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TaskModel>> GetAllTasks(){
-        List<TaskModel> tasks = taskService.GetTasks();
+    public ResponseEntity<List<TaskModel>> GetAllTasks(Pageable pageable){
+        List<TaskModel> tasks = taskService.GetTasks(pageable);
         ResponseEntity<List<TaskModel>> response = tasks.size() > 0 ? new ResponseEntity<>(tasks, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return response;
     }

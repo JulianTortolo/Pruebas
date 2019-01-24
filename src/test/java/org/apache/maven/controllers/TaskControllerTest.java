@@ -63,7 +63,7 @@ public class TaskControllerTest {
 
     @Test
     public void getTasksSuccessfully() throws Exception {
-        BDDMockito.given(this.taskService.GetTasks()).willReturn(TaskModelUtils.getTasksModel());
+        BDDMockito.given(this.taskService.GetTasks(null)).willReturn(TaskModelUtils.getTasksModel());
         mvc.perform(MockMvcRequestBuilders.get("/api/tasks/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

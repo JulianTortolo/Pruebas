@@ -7,6 +7,7 @@ import org.apache.maven.model.TaskModel;
 import org.apache.maven.repository.TaskRepository;
 import org.apache.maven.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,8 @@ public class TaskService{
         return taskModel;
     }
 
-    public List<TaskModel> GetTasks(){
-        return mapTasksToTasksModel(taskRepository.findAll());
+    public List<TaskModel> GetTasks(Pageable pageable){
+        return mapTasksToTasksModel(taskRepository.findAll(pageable).getContent());
     }
 
     public TaskModel GetTaskById(int taskId){
@@ -111,4 +112,3 @@ public class TaskService{
         return taskModels;
     }
 }
-

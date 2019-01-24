@@ -58,7 +58,7 @@ public class TaskServiceTest {
     @Test
     public void findTaskListAndValidateLengthSuccess(){
         Mockito.when(mockTaskRepository.findAll()).thenReturn(TaskUtils.getTasks());
-        List<TaskModel> tasksTests = service.GetTasks();
+        List<TaskModel> tasksTests = service.GetTasks(null);
         assertThat(tasksTests.size()).isEqualTo(2);
         Assert.assertEquals("Error validating task[0].name", "Tarea 1", tasksTests.get(0).getName());
         Assert.assertEquals("Error validating task[1].name", "Tarea 2", tasksTests.get(1).getName());
@@ -70,7 +70,7 @@ public class TaskServiceTest {
     @Test
     public void findTasksListsNotDuplicatedSuccess(){
         Mockito.when(mockTaskRepository.findAll()).thenReturn(TaskUtils.getTasks());
-        List<TaskModel> tasksTests = service.GetTasks();
+        List<TaskModel> tasksTests = service.GetTasks(null);
         assertThat(tasksTests.size()).isEqualTo(2);
         Assert.assertEquals("Error validating task[0].name", "Tarea 1", tasksTests.get(0).getName());
         Assert.assertEquals("Error validating task[1].name", "Tarea 2", tasksTests.get(1).getName());
