@@ -31,7 +31,7 @@ public final class UsersAPI {
                 userModel = jsonParser.fromJson(getUserHttpResult.getBody(), UserModel.class);
             }
         } catch (Exception ex) {
-
+            userModel = null;
         }
 
         return userModel;

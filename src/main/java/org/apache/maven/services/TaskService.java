@@ -27,7 +27,7 @@ public class TaskService{
     public TaskModel CreateTask(Task task) {
         TaskModel taskModel;
         try {
-            if (!userRepository.exists(task.getUser().getId())) {
+            if (!userRepository.existsById(task.getUser().getId())) {
                 userRepository.save(task.getUser());
             }
 
@@ -47,7 +47,7 @@ public class TaskService{
     public TaskModel GetTaskById(int taskId){
         TaskModel taskModel;
         try{
-            Task task = taskRepository.findOne(taskId);
+            Task task = taskRepository.getOne(taskId);
             taskModel = mapTaskToTaskModel(task);
         }
         catch (Exception e){
@@ -60,7 +60,7 @@ public class TaskService{
     public boolean DeleteTask(int taskId){
         boolean success;
         try {
-            taskRepository.delete(taskId);
+            taskRepository.deleteById(taskId);
             success = true  ;
         }
         catch (Exception e){
@@ -71,9 +71,9 @@ public class TaskService{
     }
 
     public TaskModel UpdateTask(Task task){
-        TaskModel taskModel = new TaskModel();
+        TaskModel taskModel;
         try{
-            Task taskSaved = taskRepository.findOne(task.getId());
+            Task taskSaved = taskRepository.getOne(task.getId());
             if(task.getId() > 0) {
                 taskSaved.setCreateDate(task.getCreateDate());
                 taskSaved.setDescription(task.getDescription());

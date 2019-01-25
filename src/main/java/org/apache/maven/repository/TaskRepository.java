@@ -9,6 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Serializable>, PagingAndSortingRepository<Task, Serializable> {
+public interface TaskRepository extends JpaRepository<Task, Integer>, PagingAndSortingRepository<Task, Integer> {
 
 }

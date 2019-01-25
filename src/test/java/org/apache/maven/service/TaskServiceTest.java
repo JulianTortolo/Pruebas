@@ -46,13 +46,13 @@ public class TaskServiceTest {
 
     @Test
     public void findTaskByIdSuccess(){
-        Mockito.when(mockTaskRepository.findOne(anyInt()))
+        Mockito.when(mockTaskRepository.getOne(anyInt()))
                 .thenReturn(TaskUtils.getTask());
         TaskModel taskTest = service.GetTaskById(1);
         Assert.assertEquals("Error de validacion. No se pudo encontrar la tarea con id 1", taskTest.getId(), 1 );
 
         verify(mockTaskRepository, times(0)).save(any(Task.class));
-        verify(mockTaskRepository, times(1)).findOne(anyInt());
+        verify(mockTaskRepository, times(1)).getOne(anyInt());
     }
 
     @Test
